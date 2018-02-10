@@ -14,7 +14,7 @@ const userSchema = new Schema({
 
 userSchema.pre('save', function(next){
     const user = this;
-    bcrypt.getSalt(10, (err,salt)=>{
+    bcrypt.genSalt(10, (err,salt)=>{
         if(err) return next(err);
         bcrypt.hash(user.password, salt, null, (err, hash)=>{
             if(err) return next(err);
@@ -24,7 +24,7 @@ userSchema.pre('save', function(next){
     });
 });
 
-userSchema.method.comparePasswords= function (candidatePassword, callback){
+userSchema.methods.comparePasswords= function (candidatePassword, callback){
     bcrypt.compare(candidatePassword, this.password, (err,isMatch)=>{
         if(err) return callback(err);
 
